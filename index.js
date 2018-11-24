@@ -1,17 +1,27 @@
-const TelegramBot = require("telegram-node-bot");
-
-const token = "686681991:AAF7UZokmM8hfL4QwlYjndSllBefphgePfM";
-
-const bot = new TelegramBot(token, { polling: true });
-
-bot.on("message", msg => {
-  var Hi = "hi";
-  if (
-    msg.text
-      .toString()
-      .toLowerCase()
-      .indexOf(Hi) === 0
-  ) {
-    bot.sendMessage(msg.chat.id, "Hello dear user");
-  }
-});
+'use strict'
+ 
+const Telegram = require('telegram-node-bot')
+const TelegramBaseController = Telegram.TelegramBaseController
+const TextCommand = Telegram.TextCommand
+const tg = new Telegram.Telegram('686681991:AAF7UZokmM8hfL4QwlYjndSllBefphgePfM')
+ 
+class PingController extends TelegramBaseController {
+    /**
+     * @param {Scope} $ 
+     */
+    pingHandler($) {
+        $.sendMessage('pong')
+    }
+ 
+    get routes() {
+        return {
+            'pingCommand': 'pingHandler'
+        }
+    }
+}
+ 
+tg.router
+    .when(
+        new TextCommand('ping', 'pingCommand'),
+        new PingController()
+    )
