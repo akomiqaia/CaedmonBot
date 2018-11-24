@@ -4,28 +4,49 @@ const Telegram = require("telegram-node-bot");
 const TelegramBaseController = Telegram.TelegramBaseController;
 const TextCommand = Telegram.TextCommand;
 const tg = new Telegram.Telegram(
-  "686681991:AAF7UZokmM8hfL4QwlYjndSllBefphgePfM"
+  "686681991:AAF7UZokmM8hfL4QwlYjndSllBefphgePfM",
+  {
+    workers: 1
+  }
 );
 
-class PingController extends TelegramBaseController {
+class StartController extends TelegramBaseController {
   /**
    * @param {Scope} $
    */
-  pingHandler($) {
-    $.sendMessage("png");
+  startHandler($) {
+    $.sendMessage("the user has been added");
   }
 
   get routes() {
     return {
-      pingCommand: "pingHandler"
+      startCommand: "startHandler"
+    };
+  }
+}
+class StopController extends TelegramBaseController {
+  /**
+   * @param {Scope} $
+   */
+  stopHandler($) {
+    $.sendMessage("The actions has been cancelled");
+  }
+
+  get routes() {
+    return {
+      stopCommand: "stopHandler"
     };
   }
 }
 
-tg.router.when(new TextCommand("hello", "pingCommand"), new PingController());
+class OtherwiseController extends TelegramBaseController {
+  handle() {
+    console.log("otherwise");
+  }
+}
 
 tg.router
   .when(new TextCommand("/start", "startCommand"), new StartController())
   .when(new TextCommand("/stop", "stopCommand"), new StopController())
-  .when(new TextCommand("/restart", "restartCommand"), new RestartController())
   .otherwise(new OtherwiseController());
+
