@@ -2,11 +2,12 @@ import json
 import  requests
 import time
 from datetime import datetime, date, timedelta
-
+from flask import Flask, request
+import os
 
 TOKEN = '686681991:AAF7UZokmM8hfL4QwlYjndSllBefphgePfM'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
-
+server = Flask(__name__)
 
 def rotLeft(a, d):
     return a[d:] + a[:d]
@@ -101,6 +102,10 @@ def build_keyboard(items):
     keyboard = [[item] for item in items]
     reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
     return json.dumps(reply_markup)
+
+# @server.route('/' + TOKEN, methods =['POST'])
+# def getMessage():
+#   bot.process_new
 
 if __name__ == '__main__':
     main()
